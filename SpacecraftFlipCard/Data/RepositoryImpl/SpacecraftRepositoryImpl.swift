@@ -11,10 +11,15 @@ struct SpacecraftRepositoryImpl: SpacecraftRepository {
     
     static let shared: SpacecraftRepositoryImpl = SpacecraftRepositoryImpl()
     
-    func getSpacecraft() async throws -> SpacecraftBO {
+    func getSpacecraft() async throws -> [SpacecraftBO] {
         do {
             let result = try await remoteDataSource.getSpacecraftData()
-            return result.toSpacecraftBO
+            let crafts = Dictionary(grouping: result.people, by: { $0.craft })
+            var spacecrafts: [SpacecraftBO] = []
+            crafts.forEach { craft, astronauts in
+                spacecrafts.append(SpacecraftBO(astronautNames: astronauts.map { $0.name }, crewCount: astronauts.count, craftName: craft))
+            }
+            return spacecrafts
         } catch {
             throw error
         }

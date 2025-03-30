@@ -6,14 +6,14 @@
 //
 
 protocol GetSpacecraftUseCaseProtocol {
-    func execute() async throws -> Result<SpacecraftBO, ErrorType>
+    func execute() async throws -> Result<[SpacecraftBO], ErrorType>
 }
 
 struct GetSpacecraftUsecase: GetSpacecraftUseCaseProtocol {
     
     let repository: SpacecraftRepository = SpacecraftRepositoryImpl.shared
     
-    func execute() async -> Result<SpacecraftBO, ErrorType> {
+    func execute() async -> Result<[SpacecraftBO], ErrorType> {
         do {
             let result = try await repository.getSpacecraft()
             return .success(result)

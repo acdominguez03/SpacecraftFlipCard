@@ -7,5 +7,5 @@
 
 
 protocol SpacecraftRepository {
-    func getSpacecraft() async throws -> SpacecraftBO
+    func getSpacecraft() async throws -> [SpacecraftBO]
 }

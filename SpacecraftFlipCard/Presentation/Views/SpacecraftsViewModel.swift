@@ -8,14 +8,11 @@
 import Foundation
 
 @Observable
-@MainActor final class SpacecraftFlipCardViewModel {
-    var spacecraft: SpacecraftVO = SpacecraftVO(astronautNames: [], crewCount: 0, craftName: "")
+@MainActor final class SpacecraftsViewModel {
+    var spacecrafts: [SpacecraftVO] = []
     
     var isLoading: Bool = true
     var errorMessage: String = ""
-    
-    var isFlipped = false
-    var rotationAngle: Double = 0
     
     let getSpacecraftUsecase: GetSpacecraftUsecase
     
@@ -31,18 +28,13 @@ import Foundation
         
         DispatchQueue.main.async {
             switch result {
-            case .success(let spacecraftBO):
-                self.spacecraft = spacecraftBO.toSpacecraftVO
+            case .success(let spacecraftsBO):
+                self.spacecrafts = spacecraftsBO.map{ $0.toSpacecraftVO }
                 self.isLoading = false
             case .failure(let error):
                 self.errorMessage = error.message
                 self.isLoading = false
             }
         }
-    }
-    
-    func flipCard() {
-        rotationAngle -= 180
-        isFlipped.toggle()
     }
 }
